@@ -118,7 +118,7 @@
 # p missing_letter("adcbFe p qgorz shNy tikJlxm vw") #should be 'u'
 # p missing_letter("bcdfefgshijklffffmnofspqrdstuvwxyza") #should be "no letter missing"
 
-###FIRST UNIQUE CHARACTER
+# ##FIRST UNIQUE CHARACTER
 
 # Given a string, find the first non-repeating character in it and return its index. If it doesn't exist, return -1.
 
@@ -135,3 +135,97 @@
 # (The "l" and "o" are repeated, so the first non-repeating character is the "v", which is at index 2.)
 
 # Note: You may assume the string contain only lowercase letters.
+
+#create a function that takes in a string
+#create a hash where default value is 0
+#for each letter in the string, +1 the value of the hash[letter]
+#iterate through hash and check if the value is 1, if so, that's your letter, so return the index of that character
+#if it gets to the end, it means everything was a dupe, so return -1
+
+# def first_unique_index(string)
+#   string_hash = Hash.new(0)
+#   string.each_char do |letter|
+#     string_hash[letter] += 1
+#   end
+#   string_hash.each_pair do | key, value| 
+#     if value == 1
+#       return string.index(key)
+#     end
+#   end
+#   return -1
+# end
+
+# p first_unique_index("loveleetcode")
+# p first_unique_index("leetcode")
+# p first_unique_index("lovelovelove")
+
+#TWO SUM II
+# This is the same exercise as Two Sum I, but you must now solve it in linear time.
+
+# Given an array of numbers, return a new array containing just two numbers (from the original array) that add up to the number 10. If there are no two numbers that add up to 10, return false.
+
+# Input: [2, 5, 3, 1, 0, 7, 11]
+# Output: [3, 7]
+
+# Input: [1, 2, 3, 4, 5]
+# Output: false (While 1, 2, 3, and 4 altogether add up to 10, we're seeking just one pair of numbers.)
+
+#write a function that takes in an array of numbers
+#create a hash with the numbers, where key is the number, value is 0
+#iterate through the hash checking if
+
+def two_sum(numbers)
+  ten_pair = []
+  outer_index = 0
+  while outer_index < numbers.length
+    inner_index = outer_index + 1
+    while inner_index < numbers.length - 1
+      sum = numbers[outer_index] + numbers[inner_index]
+      if sum == 10
+        ten_pair << numbers[outer_index]
+        ten_pair << numbers[inner_index]
+        return ten_pair
+      end
+      inner_index += 1
+    end
+    outer_index += 1
+  end
+  return false
+end
+
+# def two_sum_linear(array)
+#   number_hash = Hash.new(0)
+#   array.each { |number| number_hash[number] += 1  }
+#   number_hash.each_key do |key|
+#     if number_hash.key?(10 - key) && key != 5
+#       output = [key, (10 - key)]
+#       return output
+#     elsif number_hash[5] == 2
+#       return [5, 5]
+#     end
+#   end 
+#   return false
+# end
+
+def two_sum_linear(array)
+  number_hash = Hash.new(0)
+  array.each do |number| 
+    number_hash[number] += 1
+    if number_hash.key?(10 - number) && number != 5
+      output = [(10 - number), number]
+      return output
+    elsif number_hash[5] == 2
+      return [5, 5]
+    end
+  end
+  return false
+end
+
+p two_sum_linear([2, 5, 3, 1, 0, 7, 11])
+
+require 'benchmark'
+
+Benchmark.bm(20) do |x|
+  x.report("two_sum_linear") { two_sum_linear([1, 4, 3, 0, 0, 1, 8, 4, 3, 0, 0, 1, 8, 4, 3, 0, 0, 8, 11, 1, 2]) }
+  x.report("two_sum_nested") { two_sum([1, 4, 3, 0, 0, 1, 8, 4, 3, 0, 0, 1, 8, 4, 3, 0, 0, 8, 11, 1, 2]) }
+end
