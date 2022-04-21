@@ -207,25 +207,75 @@ end
 #   return false
 # end
 
-def two_sum_linear(array)
-  number_hash = Hash.new(0)
-  array.each do |number| 
-    number_hash[number] += 1
-    if number_hash.key?(10 - number) && number != 5
-      output = [(10 - number), number]
-      return output
-    elsif number_hash[5] == 2
-      return [5, 5]
-    end
+# def two_sum_linear(array)
+#   number_hash = Hash.new(0)
+#   array.each do |number| 
+#     number_hash[number] += 1
+#     if number_hash.key?(10 - number) && number != 5
+#       output = [(10 - number), number]
+#       return output
+#     elsif number_hash[5] == 2
+#       return [5, 5]
+#     end
+#   end
+#   return false
+# end
+
+# p two_sum_linear([2, 5, 3, 1, 0, 7, 11])
+
+# require 'benchmark'
+
+# Benchmark.bm(20) do |x|
+#   x.report("two_sum_linear") { two_sum_linear([1, 4, 3, 0, 0, 1, 8, 4, 3, 0, 0, 1, 8, 4, 3, 0, 0, 8, 11, 1, 2]) }
+#   x.report("two_sum_nested") { two_sum([1, 4, 3, 0, 0, 1, 8, 4, 3, 0, 0, 1, 8, 4, 3, 0, 0, 8, 11, 1, 2]) }
+# end
+
+###ETL #4
+# This is very similar to ETL #3, but you must now accomplish the task in linear time (O(N)).
+
+# Given an array of Youtube videos, for example:
+
+videos = [
+{title: 'How to Make Wood', author_id: 4, views: 6},
+{title: 'How to Seem Perfect', author_id: 4, views: 111},
+{title: 'Review of the New "Unbreakable Mug"', author_id: 2, views: 202},
+{title: 'Why Pigs Stink', author_id: 1, views: 12}
+]
+
+# and an array of authors, for example:
+
+authors = [
+{id: 1, first_name: 'Jazz', last_name: 'Callahan'},
+{id: 2, first_name: 'Ichabod', last_name: 'Loadbearer'},
+{id: 3, first_name: 'Saron', last_name: 'Kim'},
+{id: 4, first_name: 'Teena', last_name: 'Burgess'},
+]
+
+# Return a new array of videos in the following format, and only include videos that have at least 100 views:
+
+# [
+# {title: 'How to Seem Perfect', views: 111, author_name: 'Teena Burgess' }
+# {title: 'Review of the New "Unbreakable Mug"', views: 202, author_name: 'Ichabod Loadbearer' },
+# ]
+
+#create a function that takes in two arrays
+#create a hash for authors, where id is the key and value is concatenated name (first and last)
+#create an output array
+#for each video in the video array, if views is greater than 100, push the name, views, and name of the author
+#return most viewed array
+
+def most_views(videos, authors)
+  most_viewed = []
+  author_hash = Hash.new
+  authors.each do |author|
+    author_hash[author[:id]] = "#{author[:first_name]}"+" "+"#{author[:last_name]}"
   end
-  return false
+  videos.select! { |video| video[:views] >= 100 }
+  videos.map! do |video|
+    title = video[:title].gsub!(/["]/,'`')
+    video = {title: video[:title], views: video[:views], author_name: author_hash[video[:author_id]]}
+  end
+  videos
 end
 
-p two_sum_linear([2, 5, 3, 1, 0, 7, 11])
-
-require 'benchmark'
-
-Benchmark.bm(20) do |x|
-  x.report("two_sum_linear") { two_sum_linear([1, 4, 3, 0, 0, 1, 8, 4, 3, 0, 0, 1, 8, 4, 3, 0, 0, 8, 11, 1, 2]) }
-  x.report("two_sum_nested") { two_sum([1, 4, 3, 0, 0, 1, 8, 4, 3, 0, 0, 1, 8, 4, 3, 0, 0, 8, 11, 1, 2]) }
-end
+pp most_views(videos, authors)
