@@ -165,3 +165,35 @@
 
 
 #ETL #3
+
+#write a function that takes in a book array
+#create a new return hash set to 0
+#loop through the array
+  #if new hash has the key == 1
+    #create the key value pairing
+  #else
+    #shovel [title,  year] into the author's key
+#return the new author-centric hash
+
+def author_centric(books)
+  author_centric = Hash.new([])
+  books.each do |book|
+    author_centric[book[:author]]
+    if author_centric[book[:author]].length == 0
+      author_centric[book[:author]] = [title: [book[:title]], year: [book[:year]]]
+    else
+      author_centric[book[:author]] << [title: [book[:title]], year: [book[:year]]]
+    end
+  end
+  author_centric
+end
+
+pp author_centric([
+  {title: "The Lord of the Rings", author: "J. R. R. Tolkien", year: 1954 },
+  {title: "To Kill a Mockingbird", author: "Harper Lee", year: 1960 },
+  {title: "1984", author: "George Orwell", year: 1949 },
+  {title: "Go Set a Watchman", author: "Harper Lee", year: 2015 },
+  {title: "The Hobbit", author: "J. R. R. Tolkien", year: 1937 },
+  {title: "The Great Gatsby", author: "F. Scott Fitzgerald", year: 1925 },
+  {title: "The Two Towers", author: "J. R. R. Tolkien", year: 1954 }
+  ])
